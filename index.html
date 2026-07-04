@@ -19,31 +19,79 @@
             border: none;
             display: block;
         }
+        /* Tombol Instal Melayang */
+        #installBtn {
+            display: none; /* Tersembunyi otomatis jika aplikasi sudah terinstal */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #121212;
+            color: white;
+            border: 2px solid #ffffff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
     </style>
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
-    
-    <!-- Ikon khusus untuk layar iPhone & iPad -->
     <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
-    
-    <!-- Membuat tampilan aplikasi fullscreen tanpa bar browser Safari -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
 
+    <!-- Tombol yang akan dipaksa muncul jika Chrome mendeteksi aplikasi bisa diinstal -->
+    <button id="installBtn">Pasang Aplikasi IMAPALA</button>
+
     <iframe src="https://script.google.com/macros/s/AKfycbzscsFcPQtzRIhcOX7P4f4V5duR8AgW3zPmbFuuTHwdP5tmeb6sWqsek1snyP_QrExI/exec" allowtransparency="true"></iframe>
 
-    <!-- SKRIP TAMBAHAN: Mendaftarkan Service Worker agar Tombol Instal Muncul -->
     <script>
+        // Registrasi Service Worker biasa
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
-                    .then(reg => console.log('Service Worker Berhasil Terdaftar!'))
-                    .catch(err => console.error('Service Worker Gagal:', err));
+                navigator.serviceWorker.register('service-worker.js');
             });
         }
+
+        // Menangkap perintah instalasi otomatis dari Chrome lalu dialihkan ke tombol manual
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Mencegah Chrome memunculkan pop-up otomatis bawaan yang sering diblokir iframe
+            e.preventDefault();
+            // Simpan event-nya agar bisa dieksekusi saat tombol diklik
+            deferredPrompt = e;
+            // Munculkan tombol buatan kita di layar
+            installBtn.style.display = 'block';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                // Munculkan dialog instalasi asli milik Chrome
+                deferredPrompt.prompt();
+                // Tunggu respons user
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User menerima instalasi');
+                }
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+
+        // Sembunyikan tombol jika aplikasi sukses terinstal
+        window.addEventListener('appinstalled', () => {
+            installBtn.style.display = 'none';
+            deferredPrompt = null;
+        });
     </script>
 
 </body>
