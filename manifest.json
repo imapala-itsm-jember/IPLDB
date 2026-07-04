@@ -1,28 +1,21 @@
 {
-  "name": "Dashboard IMAPALA",
+  "name": "IMAPALA",
   "short_name": "IMAPALA",
-  "start_url": ".",
-  "display": "standalone", 
+  "start_url": "/IPLDB/",
+  "scope": "/IPLDB/",
+  "display": "standalone",
   "background_color": "#121212",
   "theme_color": "#121212",
   "icons": [
     {
       "src": "logo.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
       "src": "logo.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "logo-maskable.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/png"
     }
   ]
 }
