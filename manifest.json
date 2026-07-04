@@ -1,8 +1,8 @@
 {
   "name": "Dashboard IMAPALA",
   "short_name": "IMAPALA",
-  "start_url": ".",
-  "display": "fullscreen",
+  "start_url": "/",
+  "display": "standalone", 
   "background_color": "#121212",
   "theme_color": "#121212",
   "icons": [
@@ -17,6 +17,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "logo-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
